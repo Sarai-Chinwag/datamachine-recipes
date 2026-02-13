@@ -280,11 +280,8 @@ Use ordered lists for recipe instructions and cooking steps to ensure proper for
                 'type' => 'string',
                 'description' => 'Publication date in ISO 8601 format (auto-generated if not provided)'
             ],
-            'job_id' => [
-                'type' => 'string',
-                'required' => true,
-                'description' => 'Job ID for tracking workflow execution'
-            ]
+            // job_id is injected automatically by ToolParameters::buildParameters from the pipeline payload.
+            // Do NOT list it as a tool parameter — the AI will hallucinate a fake value that overrides the real one.
         ];
     }
 
