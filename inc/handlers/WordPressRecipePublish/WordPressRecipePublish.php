@@ -98,8 +98,6 @@ class WordPressRecipePublish extends PublishHandler {
             return $this->errorResponse('Missing required post_author in handler configuration');
         }
 
-        $handler_config = apply_filters('datamachine_apply_global_defaults', $handler_config, 'wordpress_recipe_publish', 'publish');
-
         $recipe_block_result = $this->create_recipe_schema_block( $parameters, $handler_config );
 
         if ( ! $recipe_block_result['success'] ) {
@@ -132,6 +130,8 @@ class WordPressRecipePublish extends PublishHandler {
             return $this->errorResponse($error_msg);
         }
 
+        $this->storePostTrackingMeta( $post_id, $handler_config );
+
         // Attach featured image if available and configured
         WordPressPublishHelper::attachImageToPost($post_id, $engine->getImagePath(), $handler_config);
 
@@ -139,10 +139,10 @@ class WordPressRecipePublish extends PublishHandler {
         $taxonomy_results = $this->taxonomy_handler->processTaxonomies( $post_id, $parameters, $handler_config, $engine->all() );
 
         // Store post_id in engine data for downstream handlers
-        apply_filters('datamachine_engine_data', null, $job_id, [
+        datamachine_merge_engine_data( (int) $job_id, [
             'post_id' => $post_id,
             'published_url' => get_permalink($post_id)
-        ]);
+        ] );
 
         return $this->successResponse([
             'post_id' => $post_id,
@@ -327,7 +327,8 @@ Use ordered lists for recipe instructions and cooking steps to ensure proper for
         }
         
         $author_id = $handler_config['post_author'];
-        $author_name = apply_filters( 'datamachine_wordpress_user_display_name', null, $author_id );
+        $author_user = get_userdata( $author_id );
+        $author_name = $author_user ? $author_user->display_name : null;
         if ( $author_name ) {
             $recipe_data['author'] = [
                 'name' => sanitize_text_field( $author_name ),
