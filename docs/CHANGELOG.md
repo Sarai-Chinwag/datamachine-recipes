@@ -2,6 +2,10 @@
 
 All notable changes to Data Machine Recipes will be documented in this file.
 
+## [1.1.1] - 2026-02-13
+
+- fix: align with Data Machine v0.22.1 API - replace dead filters, add post tracking
+
 ## [1.1.0] - 2025-12-24
 
 ### Added
