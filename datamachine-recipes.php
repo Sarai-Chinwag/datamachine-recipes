@@ -79,4 +79,16 @@ function datamachine_recipes_deactivate() {
 register_activation_hook( __FILE__, 'datamachine_recipes_activate' );
 register_deactivation_hook( __FILE__, 'datamachine_recipes_deactivate' );
 
-add_action( 'init', 'datamachine_recipes_init' );
+// Defer dependency check to plugins_loaded (all plugins are loaded by then).
+// This prevents load-order issues if this plugin ever loads before data-machine.
+add_action( 'plugins_loaded', function () {
+    if ( ! class_exists( 'DataMachine\\Core\\Steps\\Publish\\Handlers\\PublishHandler' ) ) {
+        add_action( 'admin_notices', function () {
+            if ( current_user_can( 'activate_plugins' ) ) {
+                echo '<div class="notice notice-error"><p>' . esc_html__( 'Data Machine core plugin is not active. Data Machine Recipes requires the Data Machine core plugin to function. Please install/activate "data-machine".', 'datamachine-recipes' ) . '</p></div>';
+            }
+        } );
+        return;
+    }
+    add_action( 'init', 'datamachine_recipes_init' );
+} );
