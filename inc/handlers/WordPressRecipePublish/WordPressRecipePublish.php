@@ -6,7 +6,6 @@ use DataMachine\Core\Steps\HandlerRegistrationTrait;
 use DataMachine\Core\WordPress\WordPressSettingsResolver;
 use DataMachine\Core\WordPress\TaxonomyHandler;
 use DataMachine\Core\WordPress\WordPressPublishHelper;
-use DataMachine\Core\WordPress\PostTrackingTrait;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -22,7 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WordPressRecipePublish extends PublishHandler {
     use HandlerRegistrationTrait;
-    use PostTrackingTrait;
 
     protected $taxonomy_handler;
 
@@ -132,7 +130,7 @@ class WordPressRecipePublish extends PublishHandler {
             return $this->errorResponse($error_msg);
         }
 
-        $this->storePostTrackingMeta( $post_id, $handler_config );
+        // Post tracking is handled automatically by the base PublishHandler.
 
         // Attach featured image if available and configured
         WordPressPublishHelper::attachImageToPost($post_id, $engine->getImagePath(), $handler_config);
