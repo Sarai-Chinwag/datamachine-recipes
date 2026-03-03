@@ -2,6 +2,11 @@
 
 All notable changes to Data Machine Recipes will be documented in this file.
 
+## [1.1.5] - 2026-03-03
+
+### Fixed
+- Remove PostTrackingTrait usage for Data Machine v0.35.0 compatibility
+
 ## [1.1.0] - 2025-12-24
 
 ### Added
