@@ -1,0 +1,17 @@
+{
+  "modules": {
+    "wordpress": {}
+  },
+  "version_targets": [
+    {
+      "file": "datamachine-recipes.php",
+      "pattern": "(?m)^\\s*\\*?\\s*Version:\\s*([0-9.]+)"
+    },
+    {
+      "file": "datamachine-recipes.php",
+      "pattern": "DATAMACHINE_RECIPES_VERSION',\\s*'([0-9.]+)'"
+    }
+  ],
+  "changelog_target": "docs/CHANGELOG.md",
+  "auto_cleanup": false
+}
